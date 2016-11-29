@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">South House Utilities</string>
+    <string name="add_item_button">Add Monthly Utility Bill</string>
 </resources>
