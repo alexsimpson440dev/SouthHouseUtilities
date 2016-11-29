@@ -7,10 +7,12 @@ package com.example.me5013zu.southhouseutilities;
 public class monthlyUtilityListItem {
     String monthYear;
     String dueDate;
+    String amountDue;
 
-    public monthlyUtilityListItem(String text){
-        this.monthYear = text;
-        this.dueDate = text;
+    public monthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
+        this.monthYear = monthYearText;
+        this.dueDate = dueDateText;
+        this.amountDue = amountDueText;
     }
 
     public String getMonthYear() {
@@ -19,5 +21,9 @@ public class monthlyUtilityListItem {
 
     public String getDueDate() {
         return dueDate;
+    }
+
+    public String getAmountDue() {
+        return amountDue;
     }
 }
