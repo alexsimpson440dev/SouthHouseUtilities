@@ -9,54 +9,90 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
+
+    EditText monthYearEditText;
+    EditText dueDateEditText;
+    EditText amountDueEditText;
+
+    private static final String ALL_UTILITIES_KEY = "All_utilities";
+    private DatabaseReference dbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button addUtilityButton = (Button) findViewById(R.id.add_items_button);
-        final EditText monthYearEditText = (EditText) findViewById(R.id.month_year_edittext);
-        final EditText dueDateEditText = (EditText) findViewById(R.id.due_date_edittext);
-        final EditText amountDueEditText = (EditText) findViewById(R.id.amount_due_edittext);
-        ListView utilityListView = (ListView) findViewById(R.id.monthly_utility_listview);
+        if (savedInstanceState == null) {
 
-        //create ArrayAdapter
-        final UtilitiesArrayAdapter utilitiesArrayAdapter = new UtilitiesArrayAdapter(this, R.layout.monthly_utility_listview);
+            Button addUtilityButton = (Button) findViewById(R.id.add_items_button);
+            monthYearEditText = (EditText) findViewById(R.id.month_year_edittext);
+            dueDateEditText = (EditText) findViewById(R.id.due_date_edittext);
+            amountDueEditText = (EditText) findViewById(R.id.amount_due_edittext);
+            ListView utilityListView = (ListView) findViewById(R.id.monthly_utility_listview);
 
-        //set adapter to listview
-        utilityListView.setAdapter(utilitiesArrayAdapter);
+            //create ArrayAdapter
+            final UtilitiesArrayAdapter utilitiesArrayAdapter = new UtilitiesArrayAdapter(this, R.layout.monthly_utility_listview);
 
-        //add listener to the button to add the items to list
-        addUtilityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            //set adapter to listview
+            utilityListView.setAdapter(utilitiesArrayAdapter);
 
-                //read what user typed into the editTexts
-                String monthYearText = monthYearEditText.getText().toString();
-                String dueDateText = dueDateEditText.getText().toString();
-                String amountDueText = amountDueEditText.getText().toString();
+            //add listener to the button to add the items to list
+            addUtilityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                if (monthYearText.length() == 0 || dueDateText.length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please enter text into Fields", Toast.LENGTH_LONG).show();
+                    //saves utility to database
+                    saveUtility();
+
+                    //read what user typed into the editTexts
+                    String monthYearText = monthYearEditText.getText().toString();
+                    String dueDateText = dueDateEditText.getText().toString();
+                    String amountDueText = amountDueEditText.getText().toString();
+
+                    if (monthYearText.length() == 0 || dueDateText.length() == 0) {
+                        Toast.makeText(MainActivity.this, "Please enter text into Fields", Toast.LENGTH_LONG).show();
+                    }
+
+                    //else create a new item in listview
+                    monthlyUtilityListItem newItem = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
+                    utilitiesArrayAdapter.add(new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText));
+
+                    //notify data changed
+                    utilitiesArrayAdapter.notifyDataSetChanged();
+
+                    //clear editTexts
+                    monthYearEditText.getText().clear();
+                    dueDateEditText.getText().clear();
+                    amountDueEditText.getText().clear();
+
+                    //set focus to first edittext field
+                    monthYearEditText.requestFocus();
                 }
+            });
 
-                //else create a new item in listview
-                monthlyUtilityListItem newItem = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
-                utilitiesArrayAdapter.add(new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText));
+        } else {
+            
+        }
 
-                //notify data changed
-                utilitiesArrayAdapter.notifyDataSetChanged();
+        //configure firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        dbReference = database.getReference();
+    }
 
-                //clear editTexts
-                monthYearEditText.getText().clear();
-                dueDateEditText.getText().clear();
-                amountDueEditText.getText().clear();
+    private void saveUtility() {
+        String monthYearText = monthYearEditText.getText().toString();
+        String dueDateText = dueDateEditText.getText().toString();
+        String amountDueText = amountDueEditText.getText().toString();
 
-                //set focus to first edittext field
-                monthYearEditText.requestFocus();
-            }
-        });
+        monthlyUtilityListItem items = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
+
+        DatabaseReference newBill = dbReference.child(ALL_UTILITIES_KEY).push();
+        newBill.setValue(items);
+
+        Toast.makeText(this, "Bill Saved", Toast.LENGTH_SHORT).show();
     }
 }

@@ -9,6 +9,7 @@ public class monthlyUtilityListItem {
     String dueDate;
     String amountDue;
 
+
     public monthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
         this.monthYear = monthYearText;
         this.dueDate = dueDateText;
@@ -26,4 +27,26 @@ public class monthlyUtilityListItem {
     public String getAmountDue() {
         return amountDue;
     }
+
+    public void setAmountDue(String amountDue) {
+        this.amountDue = amountDue;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setMonthYear(String monthYear) {
+        this.monthYear = monthYear;
+    }
+
+    @Override
+    public String toString() {
+        return "monthlyUtilityListItem{" +
+                "monthYear='" + monthYear + '\'' +
+                ", dueDate='" + dueDate + '\'' +
+                ", amountDue='" + amountDue + '\'' +
+                '}';
+    }
+
 }
