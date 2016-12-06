@@ -1,13 +1,22 @@
 package com.example.me5013zu.southhouseutilities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by me5013zu on 11/29/16.
  */
 
-public class monthlyUtilityListItem {
+public class monthlyUtilityListItem implements Parcelable {
     String monthYear;
     String dueDate;
     String amountDue;
+
+    public monthlyUtilityListItem(Parcel in) {
+        monthYear = in.readString();
+        dueDate = in.readString();
+        amountDue = in.readString();
+    }
 
 
     public monthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
@@ -47,6 +56,29 @@ public class monthlyUtilityListItem {
                 ", dueDate='" + dueDate + '\'' +
                 ", amountDue='" + amountDue + '\'' +
                 '}';
+    }
+
+    //Parcelable interface. Parcelable interfaces can send extras to other fragments/activities
+    static final Parcelable.Creator<monthlyUtilityListItem> CREATOR = new Parcelable.Creator<monthlyUtilityListItem>() {
+        public monthlyUtilityListItem createFromParcel(Parcel in) {
+            return new monthlyUtilityListItem(in);
+        }
+
+        @Override
+        public monthlyUtilityListItem[] newArray(int size) {
+            return new monthlyUtilityListItem[size];
+        }
+    };
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(monthYear);
+        dest.writeString(dueDate);
+        dest.writeString(amountDue);
     }
 
 }
