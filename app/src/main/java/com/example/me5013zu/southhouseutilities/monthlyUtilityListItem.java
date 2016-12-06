@@ -12,18 +12,22 @@ public class monthlyUtilityListItem implements Parcelable {
     String dueDate;
     String amountDue;
 
-    public monthlyUtilityListItem(Parcel in) {
-        monthYear = in.readString();
-        dueDate = in.readString();
-        amountDue = in.readString();
+    //firebase non-argument constructor
+    monthlyUtilityListItem() {
     }
-
 
     public monthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
         this.monthYear = monthYearText;
         this.dueDate = dueDateText;
         this.amountDue = amountDueText;
     }
+
+    public monthlyUtilityListItem(Parcel in) {
+        monthYear = in.readString();
+        dueDate = in.readString();
+        amountDue = in.readString();
+    }
+
 
     public String getMonthYear() {
         return monthYear;

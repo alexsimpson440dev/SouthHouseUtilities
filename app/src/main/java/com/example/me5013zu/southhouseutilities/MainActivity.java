@@ -114,22 +114,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getSortedUtilities() {
-        mostRecentListener = new ValueEventListener() {
+        //creates query for firebase to retrieve data from
+        Query getAllUtilities = dbReference.child(ALL_UTILITIES_KEY);
+
+        getAllUtilities.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    monthlyUtilityListItem utility = (ds.getValue(monthlyUtilityListItem.class));
+                    monthlyUtilityListItem utility = ds.getValue(monthlyUtilityListItem.class);
                     utilitiesArrayAdapter.add(utility);
                     utilitiesArrayAdapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e(ALL_UTILITIES_KEY, "Database failed to load");
             }
-        };
+        });
+
     }
 
     public void removeMostRecentListener() {
