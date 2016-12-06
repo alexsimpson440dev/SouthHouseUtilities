@@ -62,11 +62,14 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
+        //replaces a fragment with this fragment
         UtilityDetailFragment detailFragment = UtilityDetailFragment.newInstance(selected);
         ft.replace(android.R.id.content, detailFragment, DETAIL_FRAG_TAG);
 
+        //addtobackstack allows user to press back button
         ft.addToBackStack(DETAIL_FRAG_TAG);
 
+        //commits transaction
         ft.commit();
     }
 }

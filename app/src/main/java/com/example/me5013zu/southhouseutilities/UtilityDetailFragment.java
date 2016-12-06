@@ -32,6 +32,7 @@ public class UtilityDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_utility_detail, container, false);
 
+        //gets data from listview
         final monthlyUtilityListItem items = getArguments().getParcelable(DETAIL_ARGS);
         Log.d(TAG, "onCreateView received the following items " + items);
 
@@ -40,6 +41,7 @@ public class UtilityDetailFragment extends Fragment {
         TextView amountDueDetail = (TextView) view.findViewById(R.id.amount_due_detail_textview);
         TextView dueDateDetail = (TextView) view.findViewById(R.id.due_date_detail_textview);
 
+        //sets the text from listview to textviews
         monthYearDetail.setText(items.getMonthYear());
         amountDueDetail.setText(items.getAmountDue());
         dueDateDetail.setText(items.getDueDate());
