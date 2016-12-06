@@ -1,11 +1,16 @@
 package com.example.me5013zu.southhouseutilities;
 
 import android.*;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.app.LauncherActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,123 +26,47 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddUtilityFragment.UtilitySelectedListener {
 
-    EditText monthYearEditText;
-    EditText dueDateEditText;
-    EditText amountDueEditText;
+    private static final String DETAIL_FRAG_TAG = "detail fragment";
 
-    private static final String ALL_UTILITIES_KEY = "All_utilities";
-    private DatabaseReference dbReference;
-
-    private UtilitiesArrayAdapter utilitiesArrayAdapter;
-
-    public interface UtilityUpdateListener {
-        void utilitiesUpdated(UtilitiesArrayAdapter utilities);
-    }
-
-    FirebaseDatabase database;
-    Query mostRecentQuery;
-    ValueEventListener mostRecentListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        Button addUtilityButton = (Button) findViewById(R.id.add_items_button);
-        monthYearEditText = (EditText) findViewById(R.id.month_year_edittext);
-        dueDateEditText = (EditText) findViewById(R.id.due_date_edittext);
-        amountDueEditText = (EditText) findViewById(R.id.amount_due_edittext);
-        ListView utilityListView = (ListView) findViewById(R.id.monthly_utility_listview);
-
-
-        //create ArrayAdapter
-        utilitiesArrayAdapter = new UtilitiesArrayAdapter(this, R.layout.monthly_utility_listview);
-
-        //set adapter to listview
-        utilityListView.setAdapter(utilitiesArrayAdapter);
-
-        //add listener to the button to add the items to list
-        addUtilityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //saves utility to database
-                saveUtility();
-
-                //read what user typed into the editTexts
-                String monthYearText = monthYearEditText.getText().toString();
-                String dueDateText = dueDateEditText.getText().toString();
-                String amountDueText = amountDueEditText.getText().toString();
-
-                if (monthYearText.length() == 0 || dueDateText.length() == 0) {
-                    Toast.makeText(MainActivity.this, "Please enter text into Fields", Toast.LENGTH_LONG).show();
-                }
-
-                //else create a new item in listview
-                monthlyUtilityListItem newItem = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
-                utilitiesArrayAdapter.add(new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText));
-
-                //notify data changed
-                utilitiesArrayAdapter.notifyDataSetChanged();
-
-                //clear editTexts
-                monthYearEditText.getText().clear();
-                dueDateEditText.getText().clear();
-                amountDueEditText.getText().clear();
-
-                //set focus to first edittext field
-                monthYearEditText.requestFocus();
-            }
-        });
-
-        //configure firebase
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dbReference = database.getReference();
-
-        getSortedUtilities();
+        //sets the fragment view to the AddFragmentUtility's layout
+        addUtilityFragment();
     }
 
-    private void saveUtility() {
-        String monthYearText = monthYearEditText.getText().toString();
-        String dueDateText = dueDateEditText.getText().toString();
-        String amountDueText = amountDueEditText.getText().toString();
+    //method for setting the layout to the AddUtilityFragment
+    private void addUtilityFragment() {
+        //sets the fragment manager and transaction
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
-        monthlyUtilityListItem items = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
+        //sets new instance for AddUtilityFragment
+        AddUtilityFragment addUtilityFragment = new AddUtilityFragment();
+        //adds the fragment
+        ft.add(android.R.id.content, addUtilityFragment);
 
-        DatabaseReference newBill = dbReference.child(ALL_UTILITIES_KEY).push();
-        newBill.setValue(items);
-
-        Toast.makeText(this, "Bill Saved", Toast.LENGTH_SHORT).show();
+        //commits the transaction
+        ft.commit();
     }
 
-    private void getSortedUtilities() {
-        //creates query for firebase to retrieve data from
-        Query getAllUtilities = dbReference.child(ALL_UTILITIES_KEY);
 
-        getAllUtilities.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    monthlyUtilityListItem utility = ds.getValue(monthlyUtilityListItem.class);
-                    utilitiesArrayAdapter.add(utility);
-                    utilitiesArrayAdapter.notifyDataSetChanged();
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(ALL_UTILITIES_KEY, "Database failed to load");
-            }
-        });
+    public void getUtilityDetails(monthlyUtilityListItem selected) {
+        //begins fragment transaction
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
-    }
+        UtilityDetailFragment detailFragment = UtilityDetailFragment.newInstance(selected);
+        ft.replace(android.R.id.content, detailFragment, DETAIL_FRAG_TAG);
 
-    public void removeMostRecentListener() {
-        if (mostRecentQuery != null) {
-            mostRecentQuery.removeEventListener(mostRecentListener);
-        }
+        ft.addToBackStack(DETAIL_FRAG_TAG);
+
+        ft.commit();
     }
 }

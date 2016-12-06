@@ -10,44 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.me5013zu.southhouseutilities.MainActivity">
 
-    <EditText
-        android:id="@+id/month_year_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_month_year"/>
 
-    <EditText
-        android:id="@+id/due_date_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/month_year_edittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/hint_due_date"/>
-
-    <EditText
-        android:id="@+id/amount_due_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/due_date_edittext"
-        android:text="@string/money_sign"
-        android:hint="@string/hint_amount_due"/>
-
-    <Button
-        android:id="@+id/add_items_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/amount_due_edittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/add_item_button"/>
-
-    <ListView
-        android:id="@+id/monthly_utility_listview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_items_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
