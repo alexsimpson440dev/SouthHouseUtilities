@@ -65,12 +65,15 @@ public class AddUtilityFragment extends Fragment {
 
     //reference for the database on firebase
     public DatabaseReference dbReference;
+    FirebaseDatabase database;
+    String userId = getArguments().getString("userId");
 
     //variable for the UtilitiesArrayAdapter class
     private UtilitiesArrayAdapter utilitiesArrayAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         //inflates the add_utility_fragment.xml to the screen
         View view = inflater.inflate(R.layout.add_utility_fragment, container, false);
 
@@ -162,6 +165,8 @@ public class AddUtilityFragment extends Fragment {
     }
 
     public void getSortedUtilities() {
+
+        Query query = database.getReference().orderByChild("userId").equalTo(userId);
         //creates query for firebase to retrieve data from
         Query getAllUtilities = dbReference.child(ALL_UTILITIES_KEY);
 

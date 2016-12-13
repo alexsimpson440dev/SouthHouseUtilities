@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements AddUtilityFragment.UtilitySelectedListener {
 
     private static final String DETAIL_FRAG_TAG = "detail fragment";
+    String userId = getSharedPreferences(SignInFragment.USERS_PREFS, MODE_PRIVATE).getString(SignInFragment.FIREBASE_USER_ID_PREF_KEY, "something has gone wrong here");
 
 
     @Override
@@ -47,12 +48,16 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         FragmentTransaction ft = fm.beginTransaction();
 
         //sets new instance for AddUtilityFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
         AddUtilityFragment addUtilityFragment = new AddUtilityFragment();
+        addUtilityFragment.setArguments(bundle);
         //adds the fragment
         ft.add(android.R.id.content, addUtilityFragment);
 
         //commits the transaction
         ft.commit();
+
     }
 
 
