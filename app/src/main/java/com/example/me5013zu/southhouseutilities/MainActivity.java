@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,8 +30,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddUtilityFragment.UtilitySelectedListener {
 
+    //fragment string references
+    private static final String USERS_UTILITIES_FRAG_TAG = "users fragment";
     private static final String DETAIL_FRAG_TAG = "detail fragment";
-    String userId = getSharedPreferences(SignInFragment.USERS_PREFS, MODE_PRIVATE).getString(SignInFragment.FIREBASE_USER_ID_PREF_KEY, "something has gone wrong here");
+    //gets current user from firebase
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //sets Admin
+    protected String Admin = "alexsimpson440.dev@gmail.com";
 
 
     @Override
@@ -38,7 +45,12 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         setContentView(R.layout.activity_main);
 
         //sets the fragment view to the AddFragmentUtility's layout
-        addUtilityFragment();
+        if (user.getEmail().equals(Admin)) {
+            addUtilityFragment();
+        } else {
+            usersUtilities();
+        }
+        //Toast.makeText(this, userId, Toast.LENGTH_SHORT).show();
     }
 
     //method for setting the layout to the AddUtilityFragment
@@ -48,10 +60,7 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         FragmentTransaction ft = fm.beginTransaction();
 
         //sets new instance for AddUtilityFragment
-        Bundle bundle = new Bundle();
-        bundle.putString("userId", userId);
         AddUtilityFragment addUtilityFragment = new AddUtilityFragment();
-        addUtilityFragment.setArguments(bundle);
         //adds the fragment
         ft.add(android.R.id.content, addUtilityFragment);
 
@@ -75,6 +84,17 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         ft.addToBackStack(DETAIL_FRAG_TAG);
 
         //commits transaction
+        ft.commit();
+    }
+
+    public void usersUtilities() {
+        //begins fragment transaction
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        UsersUtilitiesFragment usersUtilitiesFragment = new UsersUtilitiesFragment();
+        ft.add(android.R.id.content, usersUtilitiesFragment);
+
         ft.commit();
     }
 }

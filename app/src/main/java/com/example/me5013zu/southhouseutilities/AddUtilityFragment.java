@@ -66,7 +66,7 @@ public class AddUtilityFragment extends Fragment {
     //reference for the database on firebase
     public DatabaseReference dbReference;
     FirebaseDatabase database;
-    String userId = getArguments().getString("userId");
+    //String userId = getArguments().getString("userId");
 
     //variable for the UtilitiesArrayAdapter class
     private UtilitiesArrayAdapter utilitiesArrayAdapter;
@@ -166,7 +166,6 @@ public class AddUtilityFragment extends Fragment {
 
     public void getSortedUtilities() {
 
-        Query query = database.getReference().orderByChild("userId").equalTo(userId);
         //creates query for firebase to retrieve data from
         Query getAllUtilities = dbReference.child(ALL_UTILITIES_KEY);
 

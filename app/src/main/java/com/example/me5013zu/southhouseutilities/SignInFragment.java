@@ -1,5 +1,7 @@
 package com.example.me5013zu.southhouseutilities;
 
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -169,13 +171,8 @@ public class SignInFragment extends FragmentActivity implements GoogleApiClient.
             prefEditor.apply();
 
             //then boot up the app by starting the MainActivity/AdminMainActivity
-            if (user.getEmail().equals(Admin)) {
-                Intent startMainActivity = new Intent(this, MainActivity.class);
-                startActivity(startMainActivity);
-            } else if (user.getEmail() != Admin){
-
-            }
-
+            Intent startMainActivity = new Intent(this, MainActivity.class);
+            startActivity(startMainActivity);
 
         }
     }
