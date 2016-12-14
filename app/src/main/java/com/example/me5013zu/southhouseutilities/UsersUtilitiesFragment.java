@@ -25,7 +25,7 @@ public class UsersUtilitiesFragment extends Fragment {
     private UtilitiesArrayAdapter utilitiesArrayAdapter;
     private static final String ALL_UTILITIES_KEY = "All_utilities";
 
-    public View onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_users_utilities, container, false);
 
         //variables
