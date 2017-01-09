@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements AddUtilityFragment.UtilitySelectedListener {
+public class MainActivity extends AppCompatActivity implements AddUtilityFragment.UtilitySelectedListener, UsersUtilitiesFragment.UsersUtilitiesSelectedListener {
 
     //fragment string references
     private static final String USERS_UTILITIES_FRAG_TAG = "users fragment";
