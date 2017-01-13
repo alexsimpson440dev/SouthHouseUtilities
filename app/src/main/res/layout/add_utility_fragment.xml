@@ -9,22 +9,12 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_month_year"/>
 
-    <EditText
-        android:id="@+id/due_date_edittext"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/due_date_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/month_year_edittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/hint_due_date"/>
-
-    <EditText
-        android:id="@+id/amount_due_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/due_date_edittext"
-        android:text="@string/money_sign"
-        android:hint="@string/hint_amount_due"/>
+        android:text="@string/due_date"
+        android:layout_below="@id/month_year_edittext"/>
 
     <Button
         android:id="@+id/add_items_button"
@@ -42,6 +32,16 @@
         android:layout_below="@+id/add_items_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/amount_due_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/money_sign"
+        android:hint="@string/hint_amount_due"
+        android:layout_below="@+id/due_date_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 
 </RelativeLayout>

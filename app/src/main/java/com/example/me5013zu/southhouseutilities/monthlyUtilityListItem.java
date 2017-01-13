@@ -7,22 +7,22 @@ import android.os.Parcelable;
  * Created by me5013zu on 11/29/16.
  */
 
-public class monthlyUtilityListItem implements Parcelable {
+public class MonthlyUtilityListItem implements Parcelable {
     String monthYear;
     String dueDate;
     String amountDue;
 
     //firebase non-argument constructor
-    monthlyUtilityListItem() {
+    MonthlyUtilityListItem() {
     }
 
-    public monthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
+    public MonthlyUtilityListItem(String monthYearText, String dueDateText, String amountDueText){
         this.monthYear = monthYearText;
         this.dueDate = dueDateText;
         this.amountDue = amountDueText;
     }
 
-    public monthlyUtilityListItem(Parcel in) {
+    public MonthlyUtilityListItem(Parcel in) {
         monthYear = in.readString();
         dueDate = in.readString();
         amountDue = in.readString();
@@ -63,14 +63,14 @@ public class monthlyUtilityListItem implements Parcelable {
     }
 
     //Parcelable interface. Parcelable interfaces can send extras to other fragments/activities
-    static final Parcelable.Creator<monthlyUtilityListItem> CREATOR = new Parcelable.Creator<monthlyUtilityListItem>() {
-        public monthlyUtilityListItem createFromParcel(Parcel in) {
-            return new monthlyUtilityListItem(in);
+    static final Parcelable.Creator<MonthlyUtilityListItem> CREATOR = new Parcelable.Creator<MonthlyUtilityListItem>() {
+        public MonthlyUtilityListItem createFromParcel(Parcel in) {
+            return new MonthlyUtilityListItem(in);
         }
 
         @Override
-        public monthlyUtilityListItem[] newArray(int size) {
-            return new monthlyUtilityListItem[size];
+        public MonthlyUtilityListItem[] newArray(int size) {
+            return new MonthlyUtilityListItem[size];
         }
     };
 

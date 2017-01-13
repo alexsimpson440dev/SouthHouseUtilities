@@ -34,7 +34,7 @@ public class UsersUtilitiesFragment extends Fragment {
 
     //interface for listener
     public interface UsersUtilitiesSelectedListener {
-        void getUtilityDetails(monthlyUtilityListItem items);
+        void getUtilityDetails(MonthlyUtilityListItem items);
     }
 
     //onAttach method for listener
@@ -106,7 +106,7 @@ public class UsersUtilitiesFragment extends Fragment {
 
                 else {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        monthlyUtilityListItem utility = ds.getValue(monthlyUtilityListItem.class);
+                        MonthlyUtilityListItem utility = ds.getValue(MonthlyUtilityListItem.class);
                         //adds data to array
                         utilitiesArrayAdapter.add(utility);
                         //notifies data in the array was changed

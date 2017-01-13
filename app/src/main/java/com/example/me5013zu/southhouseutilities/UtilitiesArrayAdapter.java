@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by me5013zu on 11/29/16.
  */
 
-public class UtilitiesArrayAdapter extends ArrayAdapter<monthlyUtilityListItem> {
+public class UtilitiesArrayAdapter extends ArrayAdapter<MonthlyUtilityListItem> {
 
     Context context;
 
@@ -35,7 +35,7 @@ public class UtilitiesArrayAdapter extends ArrayAdapter<monthlyUtilityListItem> 
         }
 
         //add data to listview
-        monthlyUtilityListItem item = getItem(position);
+        MonthlyUtilityListItem item = getItem(position);
 
         TextView monthYearItem = (TextView) rowView.findViewById(R.id.month_year_textview);
         TextView dueDateItem = (TextView) rowView.findViewById(R.id.due_date_textview);

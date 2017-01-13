@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
     //gets current user from firebase
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     //sets Admin
-    protected String Admin = "alexsimpson440.dev@gmail.com";
+    protected String admin = "alexsimpson440.dev@gmail.com";
 
 
     @Override
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
         setContentView(R.layout.activity_main);
 
         //sets the fragment view to the AddFragmentUtility's layout
-        if (user.getEmail().equals(Admin)) {
+        if (user.getEmail().equals(admin)) {
             addUtilityFragment();
         } else {
             usersUtilities();
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AddUtilityFragmen
 
 
 
-    public void getUtilityDetails(monthlyUtilityListItem selected) {
+    public void getUtilityDetails(MonthlyUtilityListItem selected) {
         //begins fragment transaction
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

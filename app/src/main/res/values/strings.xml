@@ -5,7 +5,7 @@
 
     //hints
     <string name="hint_month_year">Month Year</string>
-    <string name="hint_due_date">Due Date</string>
+    <string name="due_date">Due Date</string>
     <string name="hint_amount_due">$Amount Due</string>
     <string name="sign_in">Please sign in with your Google Account</string>
 </resources>

@@ -20,7 +20,7 @@ public class UtilityDetailFragment extends Fragment {
     private static final String TAG = "utility detail fragment";
 
     //sets arguments for this fragment
-    public static UtilityDetailFragment newInstance(monthlyUtilityListItem items) {
+    public static UtilityDetailFragment newInstance(MonthlyUtilityListItem items) {
         final Bundle args = new Bundle();
         args.putParcelable(DETAIL_ARGS, items);
         final UtilityDetailFragment fragment = new UtilityDetailFragment();
@@ -33,7 +33,7 @@ public class UtilityDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_utility_detail, container, false);
 
         //gets data from listview
-        final monthlyUtilityListItem items = getArguments().getParcelable(DETAIL_ARGS);
+        final MonthlyUtilityListItem items = getArguments().getParcelable(DETAIL_ARGS);
         Log.d(TAG, "onCreateView received the following items " + items);
 
         //set up view

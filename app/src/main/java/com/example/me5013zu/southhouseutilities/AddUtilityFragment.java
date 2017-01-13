@@ -1,14 +1,18 @@
 package com.example.me5013zu.southhouseutilities;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,6 +24,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.zip.Inflater;
 
 /**
@@ -37,8 +46,11 @@ public class AddUtilityFragment extends Fragment {
 
     //interface for listener
     public interface UtilitySelectedListener {
-        void getUtilityDetails(monthlyUtilityListItem items);
+        void getUtilityDetails(MonthlyUtilityListItem items);
     }
+
+    //access to DatePickerDialogFragment.java
+    DatePickerDialogFragment mDatePickerDialogFragment = new DatePickerDialogFragment();
 
     @Override
     public void onAttach(Context context) {
@@ -56,7 +68,7 @@ public class AddUtilityFragment extends Fragment {
 
     //variables for the edit text fields
     EditText monthYearEditText;
-    EditText dueDateEditText;
+    Button dueDateButton;
     EditText amountDueEditText;
 
     //string tags
@@ -65,7 +77,6 @@ public class AddUtilityFragment extends Fragment {
 
     //reference for the database on firebase
     public DatabaseReference dbReference;
-    FirebaseDatabase database;
     //String userId = getArguments().getString("userId");
 
     //variable for the UtilitiesArrayAdapter class
@@ -80,7 +91,7 @@ public class AddUtilityFragment extends Fragment {
         //variables for widgets
         Button addUtilityButton = (Button) view.findViewById(R.id.add_items_button);
         monthYearEditText = (EditText) view.findViewById(R.id.month_year_edittext);
-        dueDateEditText = (EditText) view.findViewById(R.id.due_date_edittext);
+        dueDateButton = (Button) view.findViewById(R.id.due_date_button);
         amountDueEditText = (EditText) view.findViewById(R.id.amount_due_edittext);
         final ListView utilityListView = (ListView) view.findViewById(R.id.monthly_utility_listview);
 
@@ -90,6 +101,15 @@ public class AddUtilityFragment extends Fragment {
 
         //set adapter to listview
         utilityListView.setAdapter(utilitiesArrayAdapter);
+
+        //opens date picker when clicked
+        dueDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+                dueDateButton.setText(mDatePickerDialogFragment.getDueDate());
+            }
+        });
 
         //add listener to the button to add the items to list
         addUtilityButton.setOnClickListener(new View.OnClickListener() {
@@ -101,27 +121,29 @@ public class AddUtilityFragment extends Fragment {
 
                 //read what user typed into the editTexts
                 String monthYearText = monthYearEditText.getText().toString();
-                String dueDateText = dueDateEditText.getText().toString();
+                String dueDateText = mDatePickerDialogFragment.getDueDate();
                 String amountDueText = amountDueEditText.getText().toString();
 
-                if (monthYearText.length() == 0 || dueDateText.length() == 0) {
+                if (monthYearText.length() == 0) {
                     Toast.makeText(getActivity(), "Please enter text into Fields", Toast.LENGTH_LONG).show();
                 }
 
-                //else create a new item in listview
-                monthlyUtilityListItem newItem = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
-                utilitiesArrayAdapter.add(new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText));
+                else {
 
-                //notify data changed
-                utilitiesArrayAdapter.notifyDataSetChanged();
+                    //else create a new item in listview
+                    MonthlyUtilityListItem newItem = new MonthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
+                    utilitiesArrayAdapter.add(new MonthlyUtilityListItem(monthYearText, dueDateText, amountDueText));
 
-                //clear editTexts
-                monthYearEditText.getText().clear();
-                dueDateEditText.getText().clear();
-                amountDueEditText.getText().clear();
+                    //notify data changed
+                    utilitiesArrayAdapter.notifyDataSetChanged();
 
-                //set focus to first edittext field
-                monthYearEditText.requestFocus();
+                    //clear editTexts
+                    monthYearEditText.getText().clear();
+                    amountDueEditText.getText().clear();
+
+                    //set focus to first edittext field
+                    monthYearEditText.requestFocus();
+                }
             }
 
 
@@ -146,15 +168,20 @@ public class AddUtilityFragment extends Fragment {
         return view;
     }
 
+    public void showDatePickerDialog() {
+        DialogFragment newFragement = new DatePickerDialogFragment();
+        newFragement.show(getFragmentManager(), "datePicker");
+    }
+
     //saves the utility information to the firebase database
     public void saveUtility() {
         //strings for the edittext widgets. converts the edittexts to a string then sets it to a variable
         String monthYearText = monthYearEditText.getText().toString();
-        String dueDateText = dueDateEditText.getText().toString();
+        String dueDateText = mDatePickerDialogFragment.getDueDate();
         String amountDueText = amountDueEditText.getText().toString();
 
         //reference for the monthlyUtilityListItem class
-        monthlyUtilityListItem items = new monthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
+        MonthlyUtilityListItem items = new MonthlyUtilityListItem(monthYearText, dueDateText, amountDueText);
 
         //pushes information to the database and sets the value
         DatabaseReference newBill = dbReference.child(ALL_UTILITIES_KEY).push();
@@ -175,7 +202,7 @@ public class AddUtilityFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //for each item in the database, add it to the list view. Used for startup
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    monthlyUtilityListItem utility = ds.getValue(monthlyUtilityListItem.class);
+                    MonthlyUtilityListItem utility = ds.getValue(MonthlyUtilityListItem.class);
                     //adds data to array
                     utilitiesArrayAdapter.add(utility);
                     //notifies data in the array was changed
